@@ -5,38 +5,51 @@ const equelsButton=document.querySelector('.equels');
 const acButton = document.querySelector('.ac');
 
 let firstOperand;
-let prevValue;
+let nextOperand;
+let firstValue;
 let nextValue;
 let sum;
 
 
 digits.forEach((digit)=>{
     digit.addEventListener('click',()=>{
-        if (display.textContent==0){
-            display.textContent=digit.textContent;
-        }else {
-            if (isOperator(digit.textContent)){
-                if (prevValue!=undefined){
-                    prevValue=operate(digit.textContent,prevValue,Number(display.textContent));
-                    console.log(prevValue);
-                }else if (prevValue==undefined) {
-                    firstOperand=digit.textContent;
-                    prevValue=display.textContent;
-                }
-                smallDisplay.textContent=prevValue;
+        setDisplay (display,digit);
+        if (isOperator(digit.textContent)){
+            if (firstValue==undefined){
+                firstOperand=digit.textContent;
+                firstValue=display.textContent;
+                smallDisplay.textContent=display.textContent + ' ' + digit.textContent;
                 display.textContent=0;
-            }else {
-                display.textContent+=digit.textContent;
+            }
+            else {
+                sum=operate(firstOperand,firstValue,Number(display.textContent));
+                display.textContent=0;
+                smallDisplay.textContent=sum + ' ' + digit.textContent;
+                firstOperand=digit.textContent;
+                firstValue=sum;
             }
         }
+        
     })
 })
 
 
-equelsButton.addEventListener('click',()=>{
-    display.textContent=prevValue;
-    smallDisplay.textContent='0';
-})
+function onEquel (operand,value){
+    if (operand==='=') {
+        display.textContent=value;
+        smallDisplay=0;
+    }
+}
+
+function setDisplay (display,digit) {
+    if (display.textContent==0){
+        display.textContent=digit.textContent;
+    }else {
+        if(isOperator(digit.textContent)) return;
+        display.textContent+=digit.textContent;
+    }
+}
+
 
 // RESET
 acButton.addEventListener('click',()=>{
