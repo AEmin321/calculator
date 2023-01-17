@@ -1,8 +1,10 @@
 const digits = document.querySelectorAll('.btn');
 const display = document.querySelector('.display');
-const smallDisplay=document.querySelector('.sm-dis');
+const smallDisplay=document.querySelector('.smalldisplay');
 const equelsButton=document.querySelector('.equels');
+const acButton = document.querySelector('.ac');
 
+let firstOperand;
 let prevValue;
 let nextValue;
 let sum;
@@ -17,7 +19,8 @@ digits.forEach((digit)=>{
                 if (prevValue!=undefined){
                     prevValue=operate(digit.textContent,prevValue,Number(display.textContent));
                     console.log(prevValue);
-                }else {
+                }else if (prevValue==undefined) {
+                    firstOperand=digit.textContent;
                     prevValue=display.textContent;
                 }
                 smallDisplay.textContent=prevValue;
@@ -30,10 +33,21 @@ digits.forEach((digit)=>{
 })
 
 
-// equelsButton,addEventListener('click',()=>{
-//     display.textContent=prevValue;
-//     smallDisplay.textContent='';
-// })
+equelsButton.addEventListener('click',()=>{
+    display.textContent=prevValue;
+    smallDisplay.textContent='0';
+})
+
+// RESET
+acButton.addEventListener('click',()=>{
+    reset ();
+})
+
+function reset () {
+    display.textContent=0;
+    smallDisplay.textContent='0';
+    prevValue=undefined;
+}
 
 
 
