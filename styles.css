@@ -49,7 +49,7 @@ body {
     background-color: #393E46 !important;
 }
 
-.btn {
+.num, .op {
     font-size: 25px;
     color: white;
     background-color: #4ECCA3;
