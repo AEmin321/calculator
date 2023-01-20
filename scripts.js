@@ -14,7 +14,7 @@ let sum;
 buttons.forEach((btn)=>{
     btn.addEventListener('click',()=>{
         setDisplay (display,btn);
-
+        
         //handles the operators
         if (isOperator(btn.textContent)){
             if (firstOperator==undefined) {
@@ -42,7 +42,7 @@ buttons.forEach((btn)=>{
         }
         // handles if input is equels
         else if (btn.textContent == '='){
-            if (firstOperator!= undefined) {
+            if (firstOperator!= undefined && secondOperator==undefined) {
                 secondValue=display.textContent;
                 sum=operate(firstOperator,firstValue,secondValue);
                 firstValue=sum;
@@ -53,12 +53,13 @@ buttons.forEach((btn)=>{
                 secondValue=undefined;
                 sum=undefined;
             }
-            else if (secondOperator != undefined) {
+            else if (secondOperator != undefined && firstOperator!=undefined) {
                 secondValue=display.textContent;
                 sum=operate(secondOperator,firstValue,secondValue);
                 display.textContent=sum;
                 firstValue=sum;
                 sum=undefined;
+                smallDisplay.textContent=0;
                 firstOperator=undefined;
                 secondValue=undefined;
                 secondOperator=undefined;
@@ -67,11 +68,17 @@ buttons.forEach((btn)=>{
     })
 })
 
+//Rounding the number 3 dec
+function roundResult (result) {
+    return Math.round(result * 1000)/1000;
+}
 
+//displaying values entered
 function setDisplay (display,digit) {
     if (display.textContent==0 && digit.textContent!='='){
         display.textContent=digit.textContent;
     }else {
+        if ((display.textContent).length>14) return;
         if(isOperator(digit.textContent) || digit.textContent=='=') return;
         display.textContent+=digit.textContent;
     }
@@ -118,6 +125,9 @@ function operate (operator,num1,num2) {
             return multiply(num1,num2);
             break;
         case '/':
+            if (num2==0){
+                return ':(';
+            }
             return divide(num1,num2);
             break;
         default:
