@@ -10,11 +10,21 @@ let secondValue;
 let sum;
 
 
+window.addEventListener('keydown',(e)=>{
+    if (e.key =='Backspace' ) {
+        display.textContent=(display.textContent).slice(0,-1);
+
+    }
+    if (display.textContent==''){
+        display.textContent=0;
+    }
+})
+
 
 buttons.forEach((btn)=>{
     btn.addEventListener('click',()=>{
         setDisplay (display,btn);
-        
+    
         //handles the operators
         if (isOperator(btn.textContent)){
             if (firstOperator==undefined) {
@@ -75,11 +85,18 @@ function roundResult (result) {
 
 //displaying values entered
 function setDisplay (display,digit) {
-    if (display.textContent==0 && digit.textContent!='='){
+    if (display.textContent===0 || display.textContent==='0' && digit.textContent!='='){
+        if (digit.textContent=='.') {
+            display.textContent='0.';
+            return ;
+        }
         display.textContent=digit.textContent;
     }else {
         if ((display.textContent).length>14) return;
         if(isOperator(digit.textContent) || digit.textContent=='=') return;
+        if (digit.textContent=='.') {
+            if ((display.textContent).includes('.')) return;
+        }
         display.textContent+=digit.textContent;
     }
 }
