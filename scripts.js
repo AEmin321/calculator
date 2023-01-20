@@ -9,9 +9,17 @@ let firstValue;
 let secondValue;
 let sum;
 
-
+//Keyboard support for numbers and backspace
 window.addEventListener('keydown',(e)=>{
-    if (e.key =='Backspace' ) {
+    const numbers=['1','2','3','4','5','6','7','8','9','0'];
+    if (numbers.includes(e.key)) {
+        if (display.textContent==0) {
+            display.textContent=e.key;
+        }else {
+            display.textContent+=e.key;
+        }
+    }
+    if (e.key =='Backspace') {
         display.textContent=(display.textContent).slice(0,-1);
 
     }
