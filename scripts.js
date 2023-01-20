@@ -1,78 +1,78 @@
-const digits = document.querySelectorAll('.num');
+const buttons = document.querySelectorAll('.btn');
 const display = document.querySelector('.display');
 const smallDisplay=document.querySelector('.smalldisplay');
-const equelsButton=document.querySelector('.equels');
 const acButton = document.querySelector('.ac');
-const operands = document.querySelectorAll('.op');
 
-let toggle=false;
-let firstOperand;
-let nextOperand;
+let firstOperator;
+let secondOperator;
 let firstValue;
-let nextValue;
+let secondValue;
 let sum;
 
 
 
-digits.forEach((digit)=>{
-    digit.addEventListener('click',()=>{
-        setDisplay (display,digit);
-            // if (isOperator(digit.textContent)){
-            //     if (firstValue==undefined){
-            //         firstOperand=digit.textContent;
-            //         firstValue=display.textContent;
-            //         smallDisplay.textContent=display.textContent + ' ' + digit.textContent;
-            //         display.textContent=0;
-            //     }
-            //     else {
-            //         sum=operate(firstOperand,firstValue,display.textContent);
-            //         display.textContent=0;
-            //         smallDisplay.textContent=sum + ' ' + digit.textContent;
-            //         firstOperand=digit.textContent;
-            //         firstValue=sum;
-            //     }
-            // }
-            
-        })
-    })
+buttons.forEach((btn)=>{
+    btn.addEventListener('click',()=>{
+        setDisplay (display,btn);
 
-handleOperators ();
-function handleOperators () {
-    operands.forEach((operand)=>{
-        operand.addEventListener('click',()=>{
-            if (firstValue==undefined) {
-                smallDisplay.textContent=display.textContent;
+        //handles the operators
+        if (isOperator(btn.textContent)){
+            if (firstOperator==undefined) {
                 firstValue=display.textContent;
+                firstOperator=btn.textContent;
+                smallDisplay.textContent=display.textContent;
                 display.textContent=0;
-                firstOperand=operand.textContent;
-            }else {
-                sum=operate(firstOperand,firstValue,display.textContent);
+            }else if (firstOperator!=undefined && secondOperator==undefined) {
+                secondOperator=btn.textContent;
+                secondValue=display.textContent;
+                sum=operate(firstOperator,firstValue,secondValue);
+                firstValue=sum;
+                smallDisplay.textContent=sum;
+                display.textContent=0;
+                sum=undefined;
+            }else if (firstOperator!=undefined && secondOperator!=undefined) {
+                secondValue=display.textContent;
+                sum=operate(secondOperator,firstValue,secondValue);
+                secondOperator=btn.textContent;
+                firstValue=sum;
                 display.textContent=0;
                 smallDisplay.textContent=sum;
-                firstValue=sum;
-                firstOperand=operand.textContent;
+                sum=undefined;
             }
-        })
+        }
+        // handles if input is equels
+        else if (btn.textContent == '='){
+            if (firstOperator!= undefined) {
+                secondValue=display.textContent;
+                sum=operate(firstOperator,firstValue,secondValue);
+                firstValue=sum;
+                display.textContent=sum;
+                smallDisplay.textContent=0;
+                firstOperator=undefined;
+                secondOperator=undefined;
+                secondValue=undefined;
+                sum=undefined;
+            }
+            else if (secondOperator != undefined) {
+                secondValue=display.textContent;
+                sum=operate(secondOperator,firstValue,secondValue);
+                display.textContent=sum;
+                firstValue=sum;
+                sum=undefined;
+                firstOperator=undefined;
+                secondValue=undefined;
+                secondOperator=undefined;
+            }
+        }
     })
-}
-
-
-
-
-equelsButton.addEventListener('click',()=>{
-    nextValue=(display.textContent).toString().slice(0,-1);
-    console.log (nextValue);
-    display.textContent=operate(firstOperand,firstValue,nextValue);
-    smallDisplay.textContent=0;
-    firstValue=nextValue;
 })
 
 
 function setDisplay (display,digit) {
-    if (display.textContent==0){
+    if (display.textContent==0 && digit.textContent!='='){
         display.textContent=digit.textContent;
     }else {
-        if(isOperator(digit.textContent)) return;
+        if(isOperator(digit.textContent) || digit.textContent=='=') return;
         display.textContent+=digit.textContent;
     }
 }
@@ -86,11 +86,14 @@ acButton.addEventListener('click',()=>{
 function reset () {
     display.textContent=0;
     smallDisplay.textContent='0';
-    prevValue=undefined;
+    firstValue=undefined;
+    secondValue=undefined;
+    firstOperator=undefined;
+    secondOperator=undefined;
 }
 
 
-
+//to check if is operator
 function isOperator (item){
     if (item =='-' || item =='+' || item =='/'
     || item =='*'){
@@ -99,6 +102,7 @@ function isOperator (item){
     return false;
 }
 
+//operating function
 function operate (operator,num1,num2) {
     num1=Number(num1);
     num2=Number(num2);
@@ -122,6 +126,7 @@ function operate (operator,num1,num2) {
     }
 }
 
+//simple math functions
 function add (num1,num2) {
     return +num1+num2;
 }
